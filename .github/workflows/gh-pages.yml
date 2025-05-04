@@ -1,0 +1,89 @@
+# SPDX-License-Identifier: MIT OR GPL-3.0-or-later
+name: pages-update
+
+permissions: {}
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, labeled]
+    branches-ignore:
+      - README
+  push:
+    branches-ignore:
+      - README
+  release:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [release-please]
+    branches: [README]
+    types: [completed]
+
+jobs:
+  build-gh-pages:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version-file: .dvmrc
+      - name: Build and Deploy
+        run: |
+          set -x
+
+          if ! curl \
+            --fail \
+            --retry 20 \
+            --retry-all-errors \
+            --show-error \
+            --location \
+            --output releases_latest.json \
+            --header "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest"; then
+
+            if [ "$GITHUB_REPOSITORY_OWNER" != "saturday06" ]; then
+              exit 0
+            fi
+            exit 1
+          fi
+
+          VITE_VRM_ADDON_FOR_BLENDER_LATEST_VERSION_NAME=$(ruby -rjson -e "puts JSON.parse(File.read('releases_latest.json'))['name']")
+          export VITE_VRM_ADDON_FOR_BLENDER_LATEST_VERSION_NAME
+          VITE_VRM_ADDON_FOR_BLENDER_LATEST_PUBLISH_DATE=$(ruby -rjson -e "puts JSON.parse(File.read('releases_latest.json'))['published_at']")
+          export VITE_VRM_ADDON_FOR_BLENDER_LATEST_PUBLISH_DATE
+
+          deno task docs:build
+
+          git fetch --depth=1 origin gh-pages
+          gh_pages_dir=$(mktemp -d)
+          git worktree add "$gh_pages_dir" gh-pages
+
+          cp -r docs/.vitepress/dist/* "$gh_pages_dir"
+          cd "$gh_pages_dir"
+          git add .
+          if git diff --cached --exit-code; then
+            exit 0
+          fi
+          git config --global user.name "$GIT_USER_NAME"
+          git config --global user.email "$GIT_USER_EMAIL"
+          git commit -m "docs: update to $GITHUB_SHA [BOT]"
+
+          git fetch --depth=1 origin README
+          git fetch --depth=1 origin main
+          git fetch --depth=1 origin website || true
+          git fetch --depth=1 origin unplanned-release || true
+          case "$GITHUB_SHA" in
+            "") exit 0;;
+            "$(git rev-parse origin/README)");;
+            "$(git rev-parse origin/main)");;
+            "$(git rev-parse origin/website || true)");;
+            "$(git rev-parse origin/unplanned-release || true)");;
+            *) exit 0;;
+          esac
+
+          git push origin gh-pages
+        env:
+          # https://github.com/orgs/community/discussions/40405#discussioncomment-8361451
+          GIT_USER_NAME: ${{ format('[BOT] {0}', github.actor) }}
+          GIT_USER_EMAIL: ${{ format('{0}+{1}@users.noreply.github.com', github.actor_id, github.actor) }}

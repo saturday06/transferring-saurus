@@ -1,0 +1,44 @@
+{
+  "name": "TransferringSaurus",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "remoteUser": "developer",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {}
+  },
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/workspace,consistency=cached",
+  "portsAttributes": {
+    "3000": {
+      "label": "npm run preview",
+      "onAutoForward": "openBrowserOnce"
+    }
+  },
+  "otherPortsAttributes": { "onAutoForward": "ignore" },
+  "mounts": [
+    // ホスト側との共有から除外するフォルダを設定
+    // https://github.com/microsoft/vscode-remote-release/issues/620#issuecomment-1086709509
+    "type=volume,target=${containerWorkspaceFolder}/.cache",
+    "type=volume,target=${containerWorkspaceFolder}/node_modules"
+  ],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.scrollback": 50000,
+        "[typescript]": {
+          "editor.defaultFormatter": "denoland.vscode-deno"
+        },
+        "[jsonc]": {
+          "editor.defaultFormatter": "denoland.vscode-deno"
+        }
+      },
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "Vue.volar",
+        "denoland.vscode-deno",
+        "ms-azuretools.vscode-containers"
+      ]
+    }
+  }
+}
