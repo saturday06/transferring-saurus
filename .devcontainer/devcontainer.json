@@ -9,19 +9,13 @@
   },
   "workspaceFolder": "/workspace",
   "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/workspace,consistency=cached",
-  "portsAttributes": {
-    "3000": {
-      "label": "npm run preview",
-      "onAutoForward": "openBrowserOnce"
-    }
-  },
-  "otherPortsAttributes": { "onAutoForward": "ignore" },
   "mounts": [
     // ホスト側との共有から除外するフォルダを設定
     // https://github.com/microsoft/vscode-remote-release/issues/620#issuecomment-1086709509
     "type=volume,target=${containerWorkspaceFolder}/.cache",
     "type=volume,target=${containerWorkspaceFolder}/node_modules"
   ],
+  "onCreateCommand": "sudo chown -Rf developer:developer . && find . -type d -exec sudo chmod 755 {} + && git checkout .",
   "customizations": {
     "vscode": {
       "settings": {
