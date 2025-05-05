@@ -1,3 +1,5 @@
+name: test
+
 permissions: {}
 
 on:
