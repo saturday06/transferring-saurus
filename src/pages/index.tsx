@@ -3,7 +3,7 @@ import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
-import HomepageFeatures from "../../src/components/HomepageFeatures/index.tsx";
+import HomepageFeatures from "../components/HomepageFeatures/index.tsx";
 import Heading from "@theme/Heading";
 import React from "react";
 import styles from "./index.module.css";
