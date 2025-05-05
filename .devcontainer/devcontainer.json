@@ -23,7 +23,7 @@
     }
   },
   "otherPortsAttributes": { "onAutoForward": "ignore" },
-  "onCreateCommand": "sudo chown -Rf developer:developer . && find . -type d -exec sudo chmod 755 {} + && git checkout .",
+  "onCreateCommand": "./tools/devcontainer_on_create_command.sh",
   "customizations": {
     "vscode": {
       "settings": {
