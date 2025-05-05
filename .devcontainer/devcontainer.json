@@ -16,6 +16,13 @@
     "type=volume,target=${containerWorkspaceFolder}/build",
     "type=volume,target=${containerWorkspaceFolder}/node_modules"
   ],
+  "portsAttributes": {
+    "3000": {
+      "label": "npm run preview",
+      "onAutoForward": "openBrowserOnce"
+    }
+  },
+  "otherPortsAttributes": { "onAutoForward": "ignore" },
   "onCreateCommand": "sudo chown -Rf developer:developer . && find . -type d -exec sudo chmod 755 {} + && git checkout .",
   "customizations": {
     "vscode": {
