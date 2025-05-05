@@ -58,13 +58,15 @@ const config: Config = {
     },
     footer: {
       style: "dark",
-      copyright: `Copyright © ${
-        new Date().getFullYear()
-      } @saturday06.`,
+      copyright: `Copyright © ${new Date().getFullYear()} @saturday06.`,
     },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
+    },
+    colorMode: {
+      defaultMode: "dark",
+      respectPrefersColorScheme: true,
     },
   } satisfies Preset.ThemeConfig,
 };
