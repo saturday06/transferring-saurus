@@ -18,8 +18,8 @@
   ],
   "portsAttributes": {
     "3000": {
-      "label": "npm run serve",
-      "onAutoForward": "openBrowserOnce"
+      "label": "docusaurus serve",
+      "onAutoForward": "silent"
     }
   },
   "otherPortsAttributes": { "onAutoForward": "ignore" },
