@@ -24,7 +24,6 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
       - uses: denoland/setup-deno@v2
         with:
           deno-version-file: .dvmrc
@@ -34,6 +33,7 @@ jobs:
           deno lint
           npm ci
           npm run build
+      - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: build
