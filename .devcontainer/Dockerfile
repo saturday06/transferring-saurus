@@ -1,10 +1,6 @@
 # SPDX-License-Identifier: MIT OR GPL-3.0-or-later
 
-# 開発環境としてCentOS Stream 9を利用する。
-# 本当はBlenderのLinux版の公式ビルド用のOSであるRocky Linux 8を利用するのが望ましいが、
-# 開発環境にするには付属パッケージが古すぎると感じるので同系統の新しいOSを選択した。
-# https://projects.blender.org/blender/blender-developer-docs/src/commit/b7d7d239c97443bec2a22ea3ae4b8ad6c585eef3/docs/handbook/release_process/build/rocky_8.md#
-FROM quay.io/centos/centos:stream9
+FROM quay.io/centos/centos:stream10
 
 # https://github.com/hadolint/hadolint/wiki/DL4006
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -21,7 +17,6 @@ RUN <<'INSTALL_PACKAGES'
     ImageMagick \
     ShellCheck \
     advancecomp \
-    blender \
     curl \
     diffutils \
     file \
@@ -33,11 +28,9 @@ RUN <<'INSTALL_PACKAGES'
     libXi \
     libxkbcommon \
     moreutils \
-    nkf \
     openssh-clients \
     patchutils \
     pv \
-    python3-dulwich \
     python3-numpy \
     python3-tqdm \
     python3-typing-extensions \
@@ -50,60 +43,6 @@ RUN <<'INSTALL_PACKAGES'
     zopfli \
     -y --setopt=install_weak_deps=False --allowerasing
 
-  if [ "$(uname -m)" != "x86_64" ]; then
-    dnf install-n \
-      OpenImageIO-devel \
-      automake \
-      autoconf \
-      bison \
-      boost-devel \
-      bzip2-devel \
-      cmake \
-      dbus-devel \
-      fftw-devel \
-      freetype \
-      gcc-c++ \
-      gcc \
-      glfw-devel \
-      libSM \
-      libX11-devel \
-      libXcursor-devel \
-      libXext \
-      libXi-devel \
-      libXinerama-devel \
-      libXrandr-devel \
-      libXtst-devel \
-      libXxf86vm-devel \
-      libdecor-devel \
-      libepoxy-devel \
-      libffi-devel \
-      libjpeg-turbo-devel \
-      libtool \
-      libxkbcommon-devel \
-      libxml2-devel \
-      libzstd-devel \
-      make \
-      mesa-libEGL-devel \
-      mesa-libGL-devel \
-      ncurses-devel \
-      ninja-build \
-      openCOLLADA-devel \
-      openssl-devel \
-      openvdb-devel \
-      openxr-devel \
-      patchelf \
-      pugixml-devel \
-      readline-devel \
-      sqlite-devel \
-      subversion \
-      tbb-devel \
-      tk-devel \
-      wayland-devel \
-      wayland-protocols-devel \
-      yasm \
-      zlib-devel \
-      -y --setopt=install_weak_deps=False --allowerasing
-  fi
   dnf clean all
 INSTALL_PACKAGES
 
