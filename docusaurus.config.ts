@@ -15,7 +15,7 @@ const config: Config = {
 
   i18n: {
     defaultLocale: "en",
-    locales: ["en"],
+    locales: ["en", "ja"],
   },
 
   presets: [
@@ -48,6 +48,10 @@ const config: Config = {
           sidebarId: "tutorialSidebar",
           position: "left",
           label: "Documentation",
+        },
+        {
+          type: "localeDropdown",
+          position: "right",
         },
         {
           href: "https://github.com/saturday06/transferring-saurus",
