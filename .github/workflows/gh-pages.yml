@@ -3,8 +3,14 @@ name: gh-pages
 permissions: {}
 
 on:
-  push: [main, website]
-  workflow_dispatch: [main, website]
+  push:
+    branches:
+      - main
+      - website
+  workflow_dispatch:
+    branches:
+      - main
+      - website
 
 concurrency:
   group: "pages"
